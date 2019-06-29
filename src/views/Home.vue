@@ -1,3 +1,156 @@
 <template>
-  <h1>我也不知道这次更改能不能成功</h1>
+  <el-container>
+    <el-header>
+      <el-row type="flex" justify="space-between" align="middle">
+        <el-col :span="6">
+          <div class="logo">
+            <img src="../assets/logo.png" alt>
+          </div>
+        </el-col>
+        <el-col>
+          <h1>电商后台管理系统</h1>
+        </el-col>
+        <el-col :span="6">
+          <div class="header_right">
+            欢迎上海39期钻石会员
+            <a href="#">退出</a>
+          </div>
+        </el-col>
+      </el-row>
+    </el-header>
+    <el-container>
+      <el-aside width="200px">
+        <el-menu
+          :default-active="$route.path"
+          class="el-menu-vertical-demo"
+          background-color="#545c64"
+          text-color="#fff"
+          active-text-color="#ffd04b"
+          :unique-opened="true"
+          :router="true"
+        >
+          <el-submenu index="1">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>用户管理</span>
+            </template>
+            <el-menu-item index="/user">
+              <i class="el-icon-menu"></i>
+              <span slot="title">用户列表</span>
+            </el-menu-item>
+          </el-submenu>
+          <el-submenu index="2">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>权限管理</span>
+            </template>
+            <el-menu-item index="1-1">
+              <i class="el-icon-menu"></i>
+              <span slot="title">角色列表</span>
+            </el-menu-item>
+            <el-menu-item index="1-1">
+              <i class="el-icon-menu"></i>
+              <span slot="title">权限列表</span>
+            </el-menu-item>
+          </el-submenu>
+          <el-submenu index="3">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>商品管理</span>
+            </template>
+            <el-menu-item index="1-1">
+              <i class="el-icon-menu"></i>
+              <span slot="title">商品列表</span>
+            </el-menu-item>
+            <el-menu-item index="1-1">
+              <i class="el-icon-menu"></i>
+              <span slot="title">分类参数</span>
+            </el-menu-item>
+            <el-menu-item index="1-1">
+              <i class="el-icon-menu"></i>
+              <span slot="title">商品分类</span>
+            </el-menu-item>
+          </el-submenu>
+          <el-submenu index="4">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>订单管理</span>
+            </template>
+            <el-menu-item index="1-1">
+              <i class="el-icon-menu"></i>
+              <span slot="title">订单列表</span>
+            </el-menu-item>
+          </el-submenu>
+          <el-submenu index="5">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>数据统计</span>
+            </template>
+            <el-menu-item index="1-1">
+              <i class="el-icon-menu"></i>
+              <span slot="title">数据报表</span>
+            </el-menu-item>
+          </el-submenu>
+        </el-menu>
+      </el-aside>
+      <el-main>
+        <router-view></router-view>
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
+<script>
+export default {
+  methods: {
+    handleOpen(key, keyPath) {
+      console.log(key, keyPath);
+    },
+    handleClose(key, keyPath) {
+      console.log(key, keyPath);
+    }
+  }
+};
+</script>
+
+<style>
+* {
+  padding: 0;
+  margin: 0;
+}
+.el-container {
+  height: 100%;
+}
+.el-container .el-header {
+  padding: 0;
+  background-color: #b3c1cd;
+}
+.el-header .el-col {
+  text-align: center;
+}
+.el-col .logo img {
+  width: 200px;
+}
+.el-header .el-col h1 {
+  font-size: 30px;
+  color: #fff;
+}
+.el-header .el-col .header_right {
+  padding-right: 15px;
+}
+.el-col .header_right {
+  font-weight: 700;
+}
+.el-col .header_right a {
+  color: orange;
+}
+
+.el-aside {
+  height: 100%;
+}
+
+.el-aside .el-menu {
+  height: 100%;
+}
+</style>
+
+

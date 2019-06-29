@@ -69,7 +69,7 @@ export default {
     };
   },
   methods: {
-    submitForm(formName) {
+    /*  submitForm(formName) {
       //this.$refs['loginForm']这个就获取到了表单对象
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -100,6 +100,26 @@ export default {
       });
     },
     loginReset(formName) {
+      this.$refs[formName].resetFields();
+    } */
+    //user.vue写完时 用async的优化 解决回调地狱
+    async submitForm(formName) {
+      let valid = await this.$refs[formName].validate();
+      if (valid) {
+        let res = await axios({
+          url: "http://localhost:8888/api/private/v1/login",
+          method: "post",
+          data: this.form
+        });
+        if (res.data.meta.status == 200) {
+          localStorage.setItem("token", res.data.data.token);
+          this.$router.push("/home");
+        }
+      } else {
+        return false;
+      }
+    },
+    restForm(formName) {
       this.$refs[formName].resetFields();
     }
   }
