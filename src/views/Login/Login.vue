@@ -133,7 +133,7 @@ export default {
             });
           }
         } catch (err) {
-          console.log("请求发送失败", err);
+          // console.log("请求发送失败", err);
         }
       } else {
         return false;
