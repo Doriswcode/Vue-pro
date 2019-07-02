@@ -4,7 +4,7 @@
       <el-row type="flex" justify="space-between" align="middle">
         <el-col :span="6">
           <div class="logo">
-            <img src="../assets/logo.png" alt>
+            <img src="../assets/logo.png" alt />
           </div>
         </el-col>
         <el-col>
@@ -119,6 +119,7 @@ export default {
 }
 .el-container {
   height: 100%;
+  background-color: pink;
 }
 .el-container .el-header {
   padding: 0;

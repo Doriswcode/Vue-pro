@@ -113,7 +113,7 @@ export default {
         });
         if (res.data.meta.status == 200) {
           localStorage.setItem("token", res.data.data.token);
-          this.$router.push("/home");
+          this.$router.push("/home");        
         }
       } else {
         return false;
@@ -124,7 +124,12 @@ export default {
     }
   }
 };
+
+export default {
+  
+}
 </script>
+
 <style>
 .row-bg {
   height: 100%;
