@@ -13,7 +13,7 @@
         <el-col :span="6">
           <div class="header_right">
             欢迎上海39期钻石会员
-            <a href="#">退出</a>
+            <a href="#" @click.prevent="logout">退出</a>
           </div>
         </el-col>
       </el-row>
@@ -102,11 +102,11 @@
 <script>
 export default {
   methods: {
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
-    },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
+    logout() {
+      //清空token
+      localStorage.removeItem("token");
+      //跳转到登陆页
+      this.$router.push("/login");
     }
   }
 };
@@ -119,7 +119,7 @@ export default {
 }
 .el-container {
   height: 100%;
-  background-color: pink;
+  background-color: #eaeef1;
 }
 .el-container .el-header {
   padding: 0;

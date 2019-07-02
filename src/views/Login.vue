@@ -13,7 +13,7 @@
           <el-input v-model="form.username"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="form.password"></el-input>
+          <el-input type="password" v-model="form.password" show-password></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
@@ -106,7 +106,7 @@ export default {
     async submitForm(formName) {
       let valid = await this.$refs[formName].validate();
       if (valid) {
-        let res = await axios({
+        /*   let res = await axios({
           url: "http://localhost:8888/api/private/v1/login",
           method: "post",
           data: this.form
@@ -114,6 +114,26 @@ export default {
         if (res.data.meta.status == 200) {
           localStorage.setItem("token", res.data.data.token);
           this.$router.push("/home");        
+        } */
+        //try...catch...完善login的如果失败丢出错误，并提醒用户 用户名错误
+        try {
+          let res = await axios({
+            url: "http://localhost:8888/api/private/v1/login",
+            method: "post",
+            data: this.form
+          });
+          if (res.data.meta.status == 200) {
+            localStorage.setItem("token", res.data.data.token);
+            this.$router.push("/home");
+          } else {
+            this.$message({
+              message: res.data.meta.msg,
+              type: "error",
+              duration: 1000
+            });
+          }
+        } catch (err) {
+          console.log("请求发送失败", err);
         }
       } else {
         return false;
@@ -124,10 +144,6 @@ export default {
     }
   }
 };
-
-export default {
-  
-}
 </script>
 
 <style>
