@@ -48,7 +48,14 @@
             @click="openEditUserDialog(row.id)"
           ></el-button>
           <el-button type="danger" icon="el-icon-delete" size="mini" plain @click="delUser(row.id)"></el-button>
-          <el-button type="success" icon="el-icon-check" size="mini" plain>分配角色</el-button>
+          <!-- 分配角色模态框 -->
+          <el-button
+            type="success"
+            icon="el-icon-check"
+            size="mini"
+            plain
+            @click="showAssainRoleDialog(row)"
+          >分配角色</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -126,9 +133,35 @@
         <el-button type="primary" @click="editUser">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 分配角色的模态框 -->
+    <el-dialog title="分配角色" :visible.sync="isAssainRoleDialogShow">
+      <el-form :model="assainRoleData" label-width="100px">
+        <el-form-item label="用户名" prop="username">
+          <el-tag type="info" v-text="assainRoleData.username"></el-tag>
+        </el-form-item>
+
+        <el-form-item label="角色">
+          <el-select v-model="assainRoleData.rid" placeholder="请选择角色">
+            <el-option
+              v-for="item in roleList"
+              :value="item.id"
+              :key="item.id"
+              :label="item.roleName"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="isAssainRoleDialogShow=false">取 消</el-button>
+        <el-button type="primary" @click="updateRole">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
+// eslint-disable-next-line
+/* eslint-disable */
+
 import axios from "axios";
 export default {
   data() {
@@ -140,6 +173,13 @@ export default {
       keyword: "",
       //控制添加用户的模态框的显示和隐藏
       isAddUserDialogShow: false,
+      //分配角色的模态框的显示和隐藏
+      isAssainRoleDialogShow: false,
+      assainRoleData: {
+        username: "",
+        rid: ""
+      },
+      roleList: [],
       //添加用户表单数据
       addUserFormData: {
         username: "",
@@ -256,6 +296,35 @@ export default {
         this.userList = data.users;
         this.total = data.total;
       });
+    },
+    //更新角色
+    async updateRole() {
+      let res = await this.$http({
+        url: `users/${this.assainRoleData.id}/role`,
+        method: "put",
+        data: {
+          rid: this.assainRoleData.rid
+        }
+      });
+      this.$message({
+        type: "success",
+        message: res.data.meta.msg,
+        duration: 1000
+      });
+      this.isAssainRoleDialogShow = false;
+    },
+    //分配角色的模态框展示
+    async showAssainRoleDialog(row) {
+      this.isAssainRoleDialogShow = true;
+      console.log(row);
+      let res = await this.$http({
+        url: `users/${row.id}`
+      });
+      this.assainRoleData = res.data.data;
+      let roleResult = await this.$http({
+        url: "roles"
+      });
+      this.roleList = roleResult.data.data;
     },
     onPageChange(page) {
       console.log("页码发生改变了", page);
