@@ -26,7 +26,7 @@ export default new Router({
           component: Roles
         },
         {
-          path: 'rights',
+          path: '/rights',
           component: Rights
         }
       ]
