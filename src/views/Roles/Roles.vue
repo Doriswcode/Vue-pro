@@ -5,6 +5,7 @@
       <el-breadcrumb-item>权限管理</el-breadcrumb-item>
       <el-breadcrumb-item>角色列表</el-breadcrumb-item>
     </el-breadcrumb>
+    <!-- ref将当前对象添加到this.$refs中 -->
     <el-table ref="roleTable" :data="roleList" stripe style="width: 100%">
       <!-- type="expand" 给列加上这个属性之后，可以实现 展开行的效果 -->
       <el-table-column type="expand">
@@ -48,7 +49,9 @@
       <el-table-column prop="roleDesc" label="描述" width="180"></el-table-column>
       <el-table-column label="操作">
         <template v-slot="{row}">
+          <!-- 编辑显示模态框 没有模板模态框 未做-->
           <el-button type="primary" plain size="mini" icon="el-icon-edit"></el-button>
+          <!-- 删除删除整行信息 没有接口而且没有添加信息的接口  未做-->
           <el-button type="danger" icon="el-icon-delete" size="mini" plain></el-button>
           <el-button
             type="success"
@@ -110,51 +113,32 @@ export default {
   methods: {
     async deleteRight(row, id) {
       // console.log(row, id);
-      // 把row里面children中所有的id拼接成一个数组
-      // 获取一级权限的id，组合成数组
-      let level1Ids = [];
-      let level2Ids = [];
-      let level3Ids = [];
-      // 获取二级权限的id，组合成数组
-      row.children.forEach(level1 => {
-        level1Ids.push(level1.id);
-        level1.children.forEach(level2 => {
-          level2Ids.push(level2.id);
-          level2.children.forEach(level3 => {
-            level3Ids.push(level3.id);
-          });
-        });
-      });
-      let result = [...level1Ids, ...level2Ids, ...level3Ids];
-      // 数组中的id对应的元素删除掉
-      // 再拼接成字符串ids
-      let ids = result.filter(v => v !== id).join();
-
-      /// 发送ajax请求
-
+      //调用接口，删除当前角色指定的权限信息
+      //接口 信息
+      // roles/:id/rights/:rightID
+      //method:delete
       let res = await this.$http({
-        url: `roles/${row.id}/rights`,
-        method: "post",
-        data: {
-          rids: ids
-        }
+        url: `roles/${row.id}/rights/${id}`,
+        method: "delete"
       });
 
       // console.log(res);
-      this.$message({
-        type: "success",
-        message: res.data.meta.msg,
-        duration: 1000
-      });
-
-      this.getRoleList(() => {
-        this.$nextTick(() => {
-          this.$refs.roleTable.toggleRowExpansion(
-            this.roleList.find(v => v.id == row.id),
-            true
-          );
+      if (res.data.meta.status == 200) {
+        this.$message({
+          type: "success",
+          message: res.data.meta.msg,
+          duration: 1000
         });
-      });
+
+        this.getRoleList(() => {
+          this.$nextTick(() => {
+            this.$refs.roleTable.toggleRowExpansion(
+              this.roleList.find(v => v.id == row.id),
+              true
+            );
+          });
+        });
+      }
     },
     async updateRoleRights() {
       // 1. 获取tree组件中，所有被勾选的节点的id
@@ -205,30 +189,30 @@ export default {
       // checkedRights ： 我们需要把当前角色row中所有的权限的id，组合成一个数组，赋值给checkedRights
       // console.log(row);
       // 获取一级权限的id，组合成数组
-      let level1Ids = [];
-      let level2Ids = [];
+      // let level1Ids = [];
+      // let level2Ids = [];
       let level3Ids = [];
       // 获取二级权限的id，组合成数组
       row.children.forEach(level1 => {
-        level1Ids.push(level1.id);
+        // level1Ids.push(level1.id);
         level1.children.forEach(level2 => {
-          level2Ids.push(level2.id);
+          // level2Ids.push(level2.id);
           level2.children.forEach(level3 => {
             level3Ids.push(level3.id);
           });
         });
       });
 
-      this.checkedRights = [...level1Ids, ...level2Ids, ...level3Ids];
+      this.checkedRights = [...level3Ids];
     },
-    async getRoleList(t = () => {}) {
+    async getRoleList(callback) {
       let res = await this.$http({
         url: "roles"
       });
 
       // console.log(res);
       this.roleList = res.data.data;
-      t();
+      callback && callback();
     }
   },
   created() {

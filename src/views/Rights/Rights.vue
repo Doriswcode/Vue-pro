@@ -8,10 +8,11 @@
 
     <el-table ref="singleTable" :data="rightsList" highlight-current-row style="width: 100%">
       <el-table-column type="index" width="50"></el-table-column>
-      <el-table-column property="authName" label="权限名称" width="120"></el-table-column>
-      <el-table-column property="path" label="路径" width="120"></el-table-column>
+      <el-table-column property="authName" label="权限名称" width="180"></el-table-column>
+      <el-table-column property="path" label="路径" width="180"></el-table-column>
       <el-table-column label="层级">
         <template v-slot="{row}">
+          <!-- 过滤器 数据|过滤器名称 -->
           <span>{{row.level | levelfilter}}</span>
         </template>
       </el-table-column>
@@ -41,6 +42,7 @@ export default {
     let res = await this.$http({
       url: "rights/list"
     });
+
     this.rightsList = res.data.data;
   }
 };

@@ -1,6 +1,8 @@
 <template>
   <el-row type="flex" class="row-bg" justify="center" align="middle">
     <el-col :xs="14" :sm="12" :md="10" :lg="8" :xl="6">
+      <!--  ref="loginForm" 将当前表单对象添加到了this.$refs中
+      :rules 将规则对象和表单关联-->
       <el-form
         class="login-form"
         ref="loginForm"
@@ -9,13 +11,16 @@
         label-width="80px"
         label-position="top"
       >
+        <!-- prop属性 用来指定数据字段 -->
         <el-form-item label="用户名" prop="username">
           <el-input v-model="form.username"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
+          <!--指定type="password" 密码会变成*** show-password展示密码小眼睛 -->
           <el-input type="password" v-model="form.password" show-password></el-input>
         </el-form-item>
         <el-form-item>
+          <!-- 注册提交事件和重置 -->
           <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
           <el-button @click="loginReset('loginForm')">重置</el-button>
         </el-form-item>
@@ -30,13 +35,13 @@
 //2、rules:{表单绑定的数据的名称:[{required:true,message:"提示消息",trigger:"触发校验的时机blur change"}]}
 //3、需要把这个校验规则对象绑定到el-form组件上， :rules="校验规则对象"
 //4、需要给每一项被校验的el-form-item 组件prop属性，属性值就是绑定的数据的名称
-import axios from "axios";
+// import axios from "axios";
 export default {
   data() {
     return {
       form: {
-        username: "",
-        password: ""
+        username: "admin",
+        password: "123456"
       },
       formRules: {
         username: [
@@ -117,8 +122,8 @@ export default {
         } */
         //try...catch...完善login的如果失败丢出错误，并提醒用户 用户名错误
         try {
-          let res = await axios({
-            url: "http://localhost:8888/api/private/v1/login",
+          let res = await this.$http({
+            url: "login",
             method: "post",
             data: this.form
           });
@@ -139,7 +144,7 @@ export default {
         return false;
       }
     },
-    restForm(formName) {
+    loginReset(formName) {
       this.$refs[formName].resetFields();
     }
   }
