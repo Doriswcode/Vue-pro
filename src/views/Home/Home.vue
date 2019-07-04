@@ -29,17 +29,12 @@
           :unique-opened="true"
           :router="true"
         >
-          <el-submenu
-            class="menu1"
-            v-for="menu1 in menuList"
-            :key="menu1.id"
-            :index="menu1.id + ''"
-          >
+          <el-submenu v-for="menu1 in menuList" :key="menu1.id" :index="menu1.id + ''">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>{{menu1.authName}}</span>
             </template>
-            <el-menu-item v-for="menu2 in menu1.children" :key="menu2.id" :index="'/'+ menu2.path">
+            <el-menu-item v-for="menu2 in menu1.children" :key="menu2.id" :index="'/' + menu2.path">
               <i class="el-icon-menu"></i>
               <span>{{menu2.authName}}</span>
             </el-menu-item>
